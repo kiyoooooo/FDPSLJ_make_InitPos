@@ -115,16 +115,18 @@ int main() {
 
 
   
-  int particle_id  = 1;//粒子番号
-  int type_lipid_a = 1;//粒子種，脂質親水基
-  int type_lipid_b = 2;//粒子種，脂質疎水基
+  int particle_id       = 1;//粒子番号
+  int type_lipid_a      = 1;//粒子種，脂質親水基
+  int type_lipid_b      = 2;//粒子種，脂質疎水基
   int type_inner_water  = 3;//粒子種，内側の水
   int type_outer_water  = 3;//粒子種，外側の水
+  int type_bond_a       = 1;//lipidのbondの種類（現状1種）
+  int type_angle_a      = 1;//lipidのangleの種類（現状1種）
   double temp_angle_xy;// (= angle_to_place_inner_lipid)
   double temp_angle_xz;// (= angle_to_place_inner_lipid)
   
   //lipidの配置
-  //内
+  //ベシクル内側を構成するlipid
 
   for(temp_angle_xy = 0; temp_angle_xy < M_PI; temp_angle_xy += angle_to_place_inner_lipid) {
     for(temp_angle_xz = 0; temp_angle_xz < 2 * M_PI; temp_angle_xz += angle_to_place_inner_lipid) {
@@ -138,41 +140,48 @@ int main() {
 
 
 
-      //疎水基2
+      //疎水基2_write_pos
       fprintf(fpo0, "%d %d   %lf   %lf   %lf \n", particle_id + 1, type_lipid_b, \
 	      (vesicle_core_pos_x + vesicle_radius - lipid_to_lipid_length / 2 - bond_length) * std::cos(temp_angle_xz) * std::cos(temp_angle_xy), \
 	      (vesicle_core_pos_y + vesicle_radius - lipid_to_lipid_length / 2 - bond_length) * std::sin(temp_angle_xy) * std::cos(temp_angle_xz), \
 	      (vesicle_core_pos_z + vesicle_radius - lipid_to_lipid_length / 2 - bond_length) * std::sin(temp_angle_xz));
       //疎水基2_write_vel
       fprintf(fpo1, "%d   %lf   %lf   %lf \n", particle_id + 1, 0.0, 0.0, 0.0);
+      //疎水基3＋疎水基2_write_bond
+      fprintf(fpo2, "%d   %d   %d \n", particle_id, particle_id + 1, type_bond_a);
 
+      
 
-      //疎水基1
+      //疎水基1_write_pos 
       fprintf(fpo0, "%d %d   %lf   %lf   %lf \n", particle_id + 2, type_lipid_b, \
 	      (vesicle_core_pos_x + vesicle_radius - lipid_to_lipid_length / 2 - bond_length * 2) * std::cos(temp_angle_xz) * std::cos(temp_angle_xy), \
 	      (vesicle_core_pos_y + vesicle_radius - lipid_to_lipid_length / 2 - bond_length * 2) * std::sin(temp_angle_xy) * std::cos(temp_angle_xz), \
 	      (vesicle_core_pos_z + vesicle_radius - lipid_to_lipid_length / 2 - bond_length * 2) * std::sin(temp_angle_xz));
       //疎水基1_write_vel
       fprintf(fpo1, "%d   %lf   %lf   %lf \n", particle_id + 2, 0.0, 0.0, 0.0);
+      //疎水基2＋疎水基1_write_bond
+      fprintf(fpo2, "%d   %d   %d \n", particle_id + 1, particle_id + 2, type_bond_a);
 
       
-      //親水基
+      //親水基_write_pos
       fprintf(fpo0, "%d %d   %lf   %lf   %lf \n", particle_id + 3, type_lipid_a, \
 	      (vesicle_core_pos_x + vesicle_radius - lipid_to_lipid_length / 2 - bond_length * 3) * std::cos(temp_angle_xz) * std::cos(temp_angle_xy), \
 	      (vesicle_core_pos_y + vesicle_radius - lipid_to_lipid_length / 2 - bond_length * 3) * std::sin(temp_angle_xy) * std::cos(temp_angle_xz), \
 	      (vesicle_core_pos_z + vesicle_radius - lipid_to_lipid_length / 2 - bond_length * 3) * std::sin(temp_angle_xz));
       //親水基_write_vel
       fprintf(fpo1, "%d   %lf   %lf   %lf \n", particle_id + 3, 0.0, 0.0, 0.0);
+      //疎水基1＋親水基_write_bond
+      fprintf(fpo2, "%d   %d   %d \n", particle_id + 2, particle_id + 3, type_bond_a);
 
       particle_id += 4;
     }
   }
 
-  //外                                                                                                                                                                                                     
+  //ベシクルの外側を構成するlipid                                                                                                                                                                                                     
 
   for(temp_angle_xy = 0; temp_angle_xy < M_PI; temp_angle_xy += angle_to_place_outer_lipid) {
     for(temp_angle_xz = 0; temp_angle_xz < 2 * M_PI; temp_angle_xz += angle_to_place_outer_lipid) {
-      //疎水基3                                                                                                                                                                                             
+      //疎水基3_write_pos                                                                                                                                                                                    
       fprintf(fpo0, "%d %d   %lf   %lf   %lf \n", particle_id, type_lipid_b, \
               (vesicle_core_pos_x + vesicle_radius + lipid_to_lipid_length / 2) * std::cos(temp_angle_xz) * std::cos(temp_angle_xy), \
               (vesicle_core_pos_y + vesicle_radius + lipid_to_lipid_length / 2) * std::sin(temp_angle_xy) * std::cos(temp_angle_xz), \
@@ -180,32 +189,38 @@ int main() {
       //疎水基3_write_vel
       fprintf(fpo1, "%d   %lf   %lf   %lf \n", particle_id, 0.0, 0.0, 0.0);
 
-      //疎水基2                                                                                                                                                                                             
+      //疎水基2_write_pos                                                                                                                                                                                   
       fprintf(fpo0, "%d %d   %lf   %lf   %lf \n", particle_id + 1, type_lipid_b, \
               (vesicle_core_pos_x + vesicle_radius + lipid_to_lipid_length / 2 + bond_length) * std::cos(temp_angle_xz) * std::cos(temp_angle_xy), \
               (vesicle_core_pos_y + vesicle_radius + lipid_to_lipid_length / 2 + bond_length) * std::sin(temp_angle_xy) * std::cos(temp_angle_xz), \
               (vesicle_core_pos_z + vesicle_radius + lipid_to_lipid_length / 2 + bond_length) * std::sin(temp_angle_xz));
       //疎水基2_write_vel
       fprintf(fpo1, "%d   %lf   %lf   %lf \n", particle_id + 1, 0.0, 0.0, 0.0);
+      //疎水基3＋疎水基2_write_bond
+      fprintf(fpo2, "%d   %d   %d \n", particle_id, particle_id + 1, type_bond_a);
 
 
-      //疎水基1                                                                                                                                                                                             
+      //疎水基1_write_pos                                                                                                                                                                                             
       fprintf(fpo0, "%d %d   %lf   %lf   %lf \n", particle_id + 2, type_lipid_b, \
               (vesicle_core_pos_x + vesicle_radius + lipid_to_lipid_length / 2 + bond_length * 2) * std::cos(temp_angle_xz) * std::cos(temp_angle_xy), \
               (vesicle_core_pos_y + vesicle_radius + lipid_to_lipid_length / 2 + bond_length * 2) * std::sin(temp_angle_xy) * std::cos(temp_angle_xz), \
               (vesicle_core_pos_z + vesicle_radius + lipid_to_lipid_length / 2 + bond_length * 2) * std::sin(temp_angle_xz));
       //疎水基1_write_vel
       fprintf(fpo1, "%d   %lf   %lf   %lf \n", particle_id + 2, 0.0, 0.0, 0.0);
+      //疎水基2＋疎水基1_write_bond
+      fprintf(fpo2, "%d   %d   %d \n", particle_id + 1, particle_id + 2, type_bond_a);
 
 
 
-      //親水基                                                                                                                                                                                              
+      //親水基_write_pos                                                                                                                                                                                              
       fprintf(fpo0, "%d %d   %lf   %lf   %lf \n", particle_id + 3, type_lipid_a, \
               (vesicle_core_pos_x + vesicle_radius + lipid_to_lipid_length / 2 + bond_length * 3) * std::cos(temp_angle_xz) * std::cos(temp_angle_xy), \
               (vesicle_core_pos_y + vesicle_radius + lipid_to_lipid_length / 2 + bond_length * 3) * std::sin(temp_angle_xy) * std::cos(temp_angle_xz), \
               (vesicle_core_pos_z + vesicle_radius + lipid_to_lipid_length / 2 + bond_length * 3) * std::sin(temp_angle_xz));
       //親水基_write_vel
       fprintf(fpo1, "%d   %lf   %lf   %lf \n", particle_id + 3, 0.0, 0.0, 0.0);
+      //疎水基1＋親水基_write_bond
+      fprintf(fpo2, "%d   %d   %d \n", particle_id + 2, particle_id + 3, type_bond_a);
 
       particle_id += 4;
     }
@@ -235,7 +250,7 @@ int main() {
 
 
     
-    //内
+    //ベシクルの内側に存在する水粒子
     if(powf(random_x - vesicle_core_pos_x, 2.0) + powf(random_y - vesicle_core_pos_y, 2.0) + powf(random_z - vesicle_core_pos_z, 2.0) < vesicle_inner_radius2 && temp_num_inner_water < num_inner_water) {
       //write_pos
       fprintf(fpo0, "%d %d   %lf   %lf   %lf \n", particle_id, type_inner_water, \
@@ -249,8 +264,9 @@ int main() {
       particle_id += 1;
       temp_num_inner_water++;
     }
-    //外
+    //ベシクルの外側に存在する水粒子
     else if(powf(random_x - vesicle_core_pos_x, 2.0) + powf(random_y - vesicle_core_pos_y, 2.0) + powf(random_z - vesicle_core_pos_z, 2.0) > vesicle_outer_radius2 && temp_num_outer_water < num_outer_water) {
+      //_write_pos
       fprintf(fpo0, "%d %d   %lf   %lf   %lf \n", particle_id, type_outer_water, \
               random_x, \
               random_y, \
