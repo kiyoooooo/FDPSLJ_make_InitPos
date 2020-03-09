@@ -50,11 +50,45 @@ int main() {
   std::ofstream writing_file0;
   writing_file0.open(filename0, std::ios::out);
 
+
+
+
+  writing_file0 << "自分で決めるパラメータ" << std::endl;
+  writing_file0 << "box_x_y = " << box_x_y << " (ボックスサイズのxが1としたときのyの比) " << std::endl;
+  writing_file0 << "box_x_z = " << box_x_z << " (ボックスサイズのxが1としたときのzの比) " << std::endl;
+  writing_file0 << "num_inner_water = " << num_inner_water << " (脂質の内側に存在する水粒子の数) " << std::endl;
+  writing_file0 << "num_outer_water = " << num_outer_water << " (脂質の外側に存在する水粒子の数) " << std::endl;
+  writing_file0 << "num_inner_lipid_part = " << num_inner_lipid_part << " (ベシクルの内側を構成する脂質の2次元半円に含まれる数) " << std::endl;
+  writing_file0 << "num_outer_lipid_part = " << num_outer_lipid_part << " (ベシクルの外側を構成する脂質の2次元半円に含まれる数) " << std::endl;
+  writing_file0 << "bond_length = " << bond_length << " (脂質分子間の長さ) " << std::endl;
+  writing_file0 << "lipid_to_lipid_length = " << lipid_to_lipid_length << " (内脂質分子と外脂質分子の距離) " << std::endl;
+  writing_file0 << "vesicle_radius = " << vesicle_radius << " (ベシクルの半径(inner_lipidとouter_lipidの中間と原点を測る) 2.154 ~= powf(10,1/3)) " << std::endl;
+  writing_file0 << "vesicle_core_pos_x = " << vesicle_core_pos_x << " (ベシクル中心x座標) " << std::endl;
+  writing_file0 << "vesicle_core_pos_y = " << vesicle_core_pos_y << " (ベシクル中心y座標) " << std::endl;
+  writing_file0 << "vesicle_core_pos_z = " << vesicle_core_pos_z << " (ベシクル中心z座標) " << std::endl;
+
+  writing_file0 << std::endl;
+
+  writing_file0 << "確定するパラメータ" << std::endl;
+  writing_file0 << "num_inner_lipid = " << num_inner_lipid << " (ベシクルの内側を構成する脂質の数) " << std::endl;
+  writing_file0 << "num_outer_lipid = " << num_outer_lipid << " (ベシクルの外側を構成する脂質の数) " << std::endl;
+  writing_file0 << "num_water = " << num_water << " (水粒子の数) " << std::endl;
+  writing_file0 << "num_lipid = " << num_lipid << " (脂質を構成する粒子の数) " << std::endl;
+  writing_file0 << "num = " << num << " (すべての粒子数) " << std::endl;
+  writing_file0 << "rho = " << rho << " (密度) " << std::endl;
+  writing_file0 << "box_size_x = " << box_size_x << " (ボックスサイズxyz三辺が1：1：1の場合, box_size_x = box_size_y = box_size_z. ) " << std::endl;
+  writing_file0 << "box_size_y = " << box_size_y << std::endl;
+  writing_file0 << "box_size_z = " << box_size_z << std::endl;
+  writing_file0 << "vesicle_thickness = " << vesicle_thickness << " (ベシクルを構成する脂質二重層の厚み) " << std::endl;
+  writing_file0 << "vesicle_inner_radius2 = " << vesicle_inner_radius2 << " (ベシクルの半径(ベシクルの中心とinner_lipidまでの距離の2乗)) " << std::endl;
+  writing_file0 << "vesicle_outer_radius2 = " << vesicle_outer_radius2 << " (ベシクルの半径(ベシクルの中心とouter_lipidまでの距離の2乗)) " << std::endl;
+  writing_file0 << "angle_to_place_inner_lipid = " << angle_to_place_inner_lipid << " (ベシクルをの内側を構成する脂質の角度間隔) " << std::endl;
+  writing_file0 << "angle_to_place_outer_lipid = " << angle_to_place_outer_lipid << " (ベシクルをの外側を構成する脂質の角度間隔) " << std::endl;
+
+  writing_file0 << std::endl;
   
-  writing_file0 << "num = " << num << std::endl;
-  writing_file0 << "num_water = " << num_water << std::endl;
-  writing_file0 << "num_lipid = " << num_lipid << std::endl;
   writing_file0 << "water : lipid = " << (double)num_water / (double)num * 100.0 << " : " << (double)num_lipid / (double)num * 100.0 << std::endl;
+
   
   if(box_size_x < std::sqrt(vesicle_outer_radius2) * 2) {
     std::cout << "NG   box_size_x = " << box_size_x << "   sqrt(vesicle_outer_radius2) * 2 = " << sqrt(vesicle_outer_radius2) * 2 << std::endl;
@@ -63,7 +97,7 @@ int main() {
 
   else {
     std::cout << "OK   box_size_x = " << box_size_x << "   sqrt(vesicle_outer_radius2) * 2 = " << sqrt(vesicle_outer_radius2) * 2 << std::endl;
-    writing_file0 << "box_size_x = " << box_size_x << "   sqrt(vesicle_outer_radius2) * 2 = " << sqrt(vesicle_outer_radius2) * 2 << std::endl;
+    writing_file0 << "OK   box_size_x = " << box_size_x << "   >   sqrt(vesicle_outer_radius2) * 2 = " << sqrt(vesicle_outer_radius2) * 2 << std::endl;
   }
   
   //open file
