@@ -8,7 +8,6 @@
 #include <random>
 #include <string.h>//文字列の代入に使う
 #include <bits/stdc++.h>//piの利用で必要(M_PI)
-//試しに変更
 
 
 int main() {
@@ -47,10 +46,15 @@ int main() {
   const double angle_to_place_outer_lipid = M_PI / (num_outer_lipid_part - 1);//ベシクルをの外側を構成する脂質の角度間隔
 
 
-  std::cout << "num = " << num << std::endl;
-  std::cout << "num_water = " << num_water << std::endl;
-  std::cout << "num_lipid = " << num_lipid << std::endl;
-  std::cout << "water : lipid = " << (double)num_water / (double)num * 100.0 << " : " << (double)num_lipid / (double)num * 100.0 << std::endl;
+  std::string filename0 = "../output/detail.txt";
+  std::ofstream writing_file0;
+  writing_file0.open(filename0, std::ios::out);
+
+  
+  writing_file0 << "num = " << num << std::endl;
+  writing_file0 << "num_water = " << num_water << std::endl;
+  writing_file0 << "num_lipid = " << num_lipid << std::endl;
+  writing_file0 << "water : lipid = " << (double)num_water / (double)num * 100.0 << " : " << (double)num_lipid / (double)num * 100.0 << std::endl;
   
   if(box_size_x < std::sqrt(vesicle_outer_radius2) * 2) {
     std::cout << "NG   box_size_x = " << box_size_x << "   sqrt(vesicle_outer_radius2) * 2 = " << sqrt(vesicle_outer_radius2) * 2 << std::endl;
@@ -59,6 +63,7 @@ int main() {
 
   else {
     std::cout << "OK   box_size_x = " << box_size_x << "   sqrt(vesicle_outer_radius2) * 2 = " << sqrt(vesicle_outer_radius2) * 2 << std::endl;
+    writing_file0 << "box_size_x = " << box_size_x << "   sqrt(vesicle_outer_radius2) * 2 = " << sqrt(vesicle_outer_radius2) * 2 << std::endl;
   }
   
   //open file
