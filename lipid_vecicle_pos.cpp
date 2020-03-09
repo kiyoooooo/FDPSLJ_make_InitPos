@@ -68,7 +68,7 @@ int main() {
   
   //open file
   FILE *fpo1;
-  fpo1 = fopen("initial_pos_lipid.cdv", "a");
+  fpo1 = fopen("../output/initial_pos_lipid.cdv", "a");
   if(fpo1 == NULL) {
     printf("ERROR_initial_pos_lipid.cdv\n");
     return -1;
