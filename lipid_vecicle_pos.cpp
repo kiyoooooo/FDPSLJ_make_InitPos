@@ -161,6 +161,8 @@ int main() {
       fprintf(fpo1, "%d   %lf   %lf   %lf \n", particle_id + 2, 0.0, 0.0, 0.0);
       //疎水基2＋疎水基1_write_bond
       fprintf(fpo2, "%d   %d   %d \n", particle_id + 1, particle_id + 2, type_bond_a);
+      //疎水基3＋疎水基2＋疎水基1_write_angle
+      fprintf(fpo3, "%d   %d   %d   %d \n", particle_id, particle_id + 1, particle_id + 2, type_angle_a);
 
       
       //親水基_write_pos
@@ -172,6 +174,8 @@ int main() {
       fprintf(fpo1, "%d   %lf   %lf   %lf \n", particle_id + 3, 0.0, 0.0, 0.0);
       //疎水基1＋親水基_write_bond
       fprintf(fpo2, "%d   %d   %d \n", particle_id + 2, particle_id + 3, type_bond_a);
+      //疎水基2＋疎水基1＋親水基_write_angle
+      fprintf(fpo3, "%d   %d   %d   %d \n", particle_id + 1, particle_id + 2, particle_id + 3, type_angle_a);
 
       particle_id += 4;
     }
@@ -209,6 +213,8 @@ int main() {
       fprintf(fpo1, "%d   %lf   %lf   %lf \n", particle_id + 2, 0.0, 0.0, 0.0);
       //疎水基2＋疎水基1_write_bond
       fprintf(fpo2, "%d   %d   %d \n", particle_id + 1, particle_id + 2, type_bond_a);
+      //疎水基3＋疎水基2＋疎水基1_write_angle
+      fprintf(fpo3, "%d   %d   %d   %d \n", particle_id, particle_id + 1, particle_id + 2, type_angle_a);
 
 
 
@@ -221,6 +227,8 @@ int main() {
       fprintf(fpo1, "%d   %lf   %lf   %lf \n", particle_id + 3, 0.0, 0.0, 0.0);
       //疎水基1＋親水基_write_bond
       fprintf(fpo2, "%d   %d   %d \n", particle_id + 2, particle_id + 3, type_bond_a);
+      //疎水基2＋疎水基1＋親水基_write_angle
+      fprintf(fpo3, "%d   %d   %d   %d \n", particle_id + 1, particle_id + 2, particle_id + 3, type_angle_a);
 
       particle_id += 4;
     }
