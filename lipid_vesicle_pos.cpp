@@ -8,24 +8,24 @@
 #include <random>
 #include <string.h>//文字列の代入に使う
 #include <bits/stdc++.h>//piの利用で必要(M_PI)
-//試しにリモートでどのように変更されるか確認　
+
 
 int main() {
 
   //自分で決めるパラメータ
   const int    box_x_y = 1 ;//ボックスサイズのxが1としたときのyの比
   const int    box_x_z = 1 ;//ボックスサイズのxが1としたときのzの比
-  const int    num_inner_water = 1200000  ;//脂質の内側に存在する水粒子の数
-  //11000 110000 1100000
-  const int    num_outer_water = 25000000 ;//脂質の外側に存在する水粒子の数
-  //240000 2400000 24000000
-  const int    num_inner_lipid_part  = 440  ;//ベシクルの内側を構成する脂質の2次元半円に含まれる数
-  //45 140 435
-  const int    num_outer_lipid_part  = 530  ;//ベシクルの外側を構成する脂質の2次元半円に含まれる数
-  //55 170 525
+  const int    num_inner_water = 12000  ;//脂質の内側に存在する水粒子の数
+  //1100 11000 110000 1200000
+  const int    num_outer_water = 200000 ;//脂質の外側に存在する水粒子の数
+  //24000 240000 2400000 25000000
+  const int    num_inner_lipid_part  = 45  ;//ベシクルの内側を構成する脂質の2次元半円に含まれる数 約　*0.32　で下の1/10のサイズ
+  //15 45 140 440
+  const int    num_outer_lipid_part  = 55  ;//ベシクルの外側を構成する脂質の2次元半円に含まれる数
+  //17 55 170 530
   const double bond_length     = 0.5 ;//脂質分子間の長さ
   const double lipid_to_lipid_length = 0.5 ;//内脂質分子と外脂質分子の距離
-  const double vesicle_radius  = 13.0 * 2.154 * 2.154 ;//ベシクルの半径(inner_lipidとouter_lipidの中間と原点を測る) 2.154 ~= powf(10,1/3) 粒子数10倍にしたければ10倍の(^1/3)をかけたもの．
+  const double vesicle_radius  = 13.0;// /2.154 ; // * 2.154 * 2.154 ;//ベシクルの半径(inner_lipidとouter_lipidの中間と原点を測る) 2.154 ~= powf(10,1/3) 粒子数10倍にしたければ10倍の(^1/3)をかけたもの．
   const double vesicle_core_pos_x = 0;//ベシクル中心x座標
   const double vesicle_core_pos_y = 0;//ベシクル中心y座標
   const double vesicle_core_pos_z = 0;//ベシクル中心z座標
