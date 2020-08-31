@@ -162,12 +162,34 @@ int main() {
   int type_angle_a      = 1;//lipidのangleの種類（現状1種）
   double temp_angle_xy;// (= angle_to_place_inner_lipid)
   double temp_angle_xz;// (= angle_to_place_inner_lipid)
-  
+  double lipid_delete_rate = 0.4;
+  double size_ratio = 1.0/1.7;
+  double power_ratio = 10.0;
+  std::random_device seed_gen;
+  std::mt19937_64 engine(seed_gen());
+  // [0.0, 1.0) の一様分布実数生成器
+  std::uniform_real_distribution<double> get_rand_uni_real(0.0, 1.0);
+
+
+
   //lipidの配置
   //ベシクル内側を構成するlipid
 
   for(temp_angle_xy = 0; temp_angle_xy < M_PI; temp_angle_xy += angle_to_place_inner_lipid) {
     for(temp_angle_xz = 0; temp_angle_xz < 2 * M_PI; temp_angle_xz += angle_to_place_inner_lipid) {
+
+
+//std::cout<<(1/2)*(1-std::cos(temp_angle_xz))<<std::endl;
+//std::cout<<(1.0/2.0)*(1-std::cos(temp_angle_xz))<<std::endl;// 1.0が必要だった．そうでなければ，整数型にキャストされてゼロになってしまう．
+//std::cout<<temp_angle_xz<<std::endl;
+//std::cout<<(1/2)*(1-std::cos(2*M_PI*2*temp_angle_xz/2*M_PI))* get_rand_uni_real(engine)<<std::endl;
+//std::cout<< get_rand_uni_real(engine)<<std::endl;
+
+//      if(temp_angle_xz *lipid_delete_rate*get_rand_uni_real(engine) > 2 * M_PI) {//密度の高い部分を改善するため
+//      if(temp_angle_xz <=  angle_to_place_outer_lipid*10) {//密度の高い部分を改善するため
+//      if(std::pow((1.0/2.0)*(1.0-std::cos(2.0*temp_angle_xz)),8.0)* get_rand_uni_real(engine) <=  lipid_delete_rate && (1.0/2.0)*(1.0-std::cos(2.0*temp_angle_xz)) != 1.0) {//密度の高い部分を改善するため
+//      if(-(std::pow((1.0/2.0)*(1.0-std::cos(2.0*temp_angle_xz-M_PI)),2.0)-1)* get_rand_uni_real(engine) <=  lipid_delete_rate && (1.0/2.0)*(1.0-std::cos(2.0*temp_angle_xz)) != 1.0) {//密度の高い部分を改善するため
+        if(std::pow(size_ratio*(1.0-std::cos(2.0*temp_angle_xz)),power_ratio)* get_rand_uni_real(engine) <=  lipid_delete_rate && (1.0/2.0)*(1.0-std::cos(2.0*temp_angle_xz)) != 1.0) {//密度の高い部分を改善するため
       //疎水基3_write_pos
       fprintf(fpo0, "%d %d   %lf   %lf   %lf \n", particle_id, type_lipid_b, \
 	      (vesicle_core_pos_x + vesicle_radius - lipid_to_lipid_length / 2) * std::cos(temp_angle_xz) * std::cos(temp_angle_xy), \
@@ -216,6 +238,7 @@ int main() {
       fprintf(fpo3, "%d   %d   %d   %d \n", particle_id + 1, particle_id + 2, particle_id + 3, type_angle_a);
 
       particle_id += 4;
+      }
     }
   }
 
@@ -223,6 +246,13 @@ int main() {
 
   for(temp_angle_xy = 0; temp_angle_xy < M_PI; temp_angle_xy += angle_to_place_outer_lipid) {
     for(temp_angle_xz = 0; temp_angle_xz < 2 * M_PI; temp_angle_xz += angle_to_place_outer_lipid) {
+
+
+//      if(temp_angle_xz *lipid_delete_rate*get_rand_uni_real(engine) > 2 * M_PI) {//密度の高い部分を改善するため
+//      if(temp_angle_xz <=  angle_to_place_outer_lipid*10) {//密度の高い部分を改善するため
+//      if((1.0/2.0)*(1.0-std::cos(2.0*temp_angle_xz))* get_rand_uni_real(engine) <=  lipid_delete_rate) {//密度の高い部分を改善するため
+//      if(-(std::pow((1.0/2.0)*(1.0-std::cos(2.0*temp_angle_xz-M_PI)),2.0)-1)* get_rand_uni_real(engine) <=  lipid_delete_rate && (1.0/2.0)*(1.0-std::cos(2.0*temp_angle_xz)) != 1.0) {//密度の高い部分を改善するため
+        if(std::pow(size_ratio*(1.0-std::cos(2.0*temp_angle_xz)),power_ratio)* get_rand_uni_real(engine) <=  lipid_delete_rate && (1.0/2.0)*(1.0-std::cos(2.0*temp_angle_xz)) != 1.0) {//密度の高い部分を改善するため
       //疎水基3_write_pos                                                                                                                                                                                    
       fprintf(fpo0, "%d %d   %lf   %lf   %lf \n", particle_id, type_lipid_b, \
               (vesicle_core_pos_x + vesicle_radius + lipid_to_lipid_length / 2) * std::cos(temp_angle_xz) * std::cos(temp_angle_xy), \
@@ -269,6 +299,7 @@ int main() {
       fprintf(fpo3, "%d   %d   %d   %d \n", particle_id + 1, particle_id + 2, particle_id + 3, type_angle_a);
 
       particle_id += 4;
+      }
     }
   }
 
@@ -279,10 +310,11 @@ int main() {
   double random_x;
   double random_y;
   double random_z;
-  std::random_device seed_gen;
-  std::mt19937_64 engine(seed_gen());
+  //上で定義したため，ここではコメント化
+//  std::random_device seed_gen;
+//  std::mt19937_64 engine(seed_gen());
   // [0.0, 1.0) の一様分布実数生成器
-  std::uniform_real_distribution<double> get_rand_uni_real(0.0, 1.0);
+//  std::uniform_real_distribution<double> get_rand_uni_real(0.0, 1.0);
 
     
 
