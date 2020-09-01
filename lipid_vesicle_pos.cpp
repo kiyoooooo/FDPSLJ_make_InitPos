@@ -318,7 +318,7 @@ int main() {
 
     
 
-  while(temp_num_inner_water < num_inner_water || temp_num_outer_water < num_outer_water) {
+  while(temp_num_inner_water < num_inner_water ) {
 
 
 
@@ -342,6 +342,15 @@ int main() {
       particle_id += 1;
       temp_num_inner_water++;
     }
+  }
+  while(temp_num_outer_water < num_outer_water) {
+
+
+    random_x = (get_rand_uni_real(engine) - 0.50) * box_size_x;//本来は (get_rand_uni_real(engine) - 0.50) * 2 * box_size_x / 2
+    random_y = (get_rand_uni_real(engine) - 0.50) * box_size_y;
+    random_z = (get_rand_uni_real(engine) - 0.50) * box_size_z;//ボックスの中心が原点(0,0)であることに注意．負の座標が許されないなら座標をbox_size/2ずらす必要がある．
+
+
     //ベシクルの外側に存在する水粒子
     else if(powf(random_x - vesicle_core_pos_x, 2.0) + powf(random_y - vesicle_core_pos_y, 2.0) + powf(random_z - vesicle_core_pos_z, 2.0) > vesicle_outer_radius2 && temp_num_outer_water < num_outer_water) {
       //_write_pos
@@ -356,6 +365,7 @@ int main() {
       particle_id += 1;
       temp_num_outer_water++;
     }
+  }
 
     //    std::cout<<"temp_num_inner_water"<<temp_num_inner_water<<"temp_num_outer_water"<<temp_num_outer_water<<std::endl;
   }
