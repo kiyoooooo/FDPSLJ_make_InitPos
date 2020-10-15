@@ -15,13 +15,13 @@ int main()
   //自分で決めるパラメータ
   const int box_x_y = 1;              //ボックスサイズのxが1としたときのyの比
   const int box_x_z = 1;              //ボックスサイズのxが1としたときのzの比
-  const int num_inner_water = 1200000; //脂質の内側に存在する水粒子の数
+  const int num_inner_water = 3000000; //脂質の内側に存在する水粒子の数
   //1100 11000 110000 1200000
   const int num_outer_water = 25000000; //脂質の外側に存在する水粒子の数
   //24000 240000 2400000 25000000
-  const int num_inner_lipid_part = 440; //ベシクルの内側を構成する脂質の2次元半円に含まれる数 約　*0.32　で下の1/10のサイズ
+  const int num_inner_lipid_part = 220; //ベシクルの内側を構成する脂質の2次元半円に含まれる数 約　*0.32　で下の1/10のサイズ
   //15 45 140 440
-  const int num_outer_lipid_part = 530; //ベシクルの外側を構成する脂質の2次元半円に含まれる数
+  const int num_outer_lipid_part = 240; //ベシクルの外側を構成する脂質の2次元半円に含まれる数
   //17 55 170 530
   const double bond_length = 0.5;             //脂質分子間の長さ
   const double lipid_to_lipid_length = 0.5;   //内脂質分子と外脂質分子の距離
@@ -200,7 +200,9 @@ int main()
     {
       temp_angle_xz += angle_to_place_inner_lipid;
 
-      current_rand = get_rand_uni_real(engine);
+//      current_rand = get_rand_uni_real(engine);
+      current_rand = 0.8;//ベシクルに穴をあけるため
+
       //std::cout<<(1/2)*(1-std::cos(temp_angle_xz))<<std::endl;
       //std::cout<<(1.0/2.0)*(1-std::cos(temp_angle_xz))<<std::endl;// 1.0が必要だった．そうでなければ，整数型にキャストされてゼロになってしまう．
       //std::cout<<temp_angle_xz<<std::endl;
@@ -322,7 +324,9 @@ int main()
     for (count_num_outer_lipid_xz = 0; count_num_outer_lipid_xz < num_outer_lipid_xz; count_num_outer_lipid_xz++)
     {
       temp_angle_xz += angle_to_place_outer_lipid;
-      current_rand = get_rand_uni_real(engine);
+//      current_rand = get_rand_uni_real(engine);
+      current_rand = 0.8;//ベシクルに穴をあけるため
+
       //      if(temp_angle_xz *lipid_delete_rate*get_rand_uni_real(engine) > 2 * M_PI) {//密度の高い部分を改善するため
       //      if(temp_angle_xz <=  angle_to_place_outer_lipid*10) {//密度の高い部分を改善するため
       //      if((1.0/2.0)*(1.0-std::cos(2.0*temp_angle_xz))* get_rand_uni_real(engine) <=  lipid_delete_rate) {//密度の高い部分を改善するため
