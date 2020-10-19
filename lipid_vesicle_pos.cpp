@@ -9,19 +9,21 @@
 #include <string.h>      //文字列の代入に使う
 #include <bits/stdc++.h> //piの利用で必要(M_PI)
 
+
+#define SET_WATER_MIDIUM //水の粒子配置をベシクル内外均一にする．num_inner_water+num_outer_waterをベシクル膜にかぶらないように均一（一様乱数）に設置する．
 int main()
 {
 
   //自分で決めるパラメータ
   const int box_x_y = 1;              //ボックスサイズのxが1としたときのyの比
   const int box_x_z = 1;              //ボックスサイズのxが1としたときのzの比
-  const int num_inner_water = 3000000; //脂質の内側に存在する水粒子の数
+  const int num_inner_water = 2760000; //脂質の内側に存在する水粒子の数
   //1100 11000 110000 1200000
   const int num_outer_water = 25000000; //脂質の外側に存在する水粒子の数
   //24000 240000 2400000 25000000
-  const int num_inner_lipid_part = 220; //ベシクルの内側を構成する脂質の2次元半円に含まれる数 約　*0.32　で下の1/10のサイズ
+  const int num_inner_lipid_part = 200; //ベシクルの内側を構成する脂質の2次元半円に含まれる数 約　*0.32　で下の1/10のサイズ
   //15 45 140 440
-  const int num_outer_lipid_part = 240; //ベシクルの外側を構成する脂質の2次元半円に含まれる数
+  const int num_outer_lipid_part = 220; //ベシクルの外側を構成する脂質の2次元半円に含まれる数
   //17 55 170 530
   const double bond_length = 0.5;             //脂質分子間の長さ
   const double lipid_to_lipid_length = 0.5;   //内脂質分子と外脂質分子の距離
@@ -162,6 +164,7 @@ int main()
   int type_lipid_b = 2;     //粒子種，脂質疎水基
   int type_inner_water = 3; //粒子種，内側の水
   int type_outer_water = 3; //粒子種，外側の水
+  int type_water = 3; //粒子種，外側の水
   int type_bond_a = 1;      //lipidのbondの種類（現状1種）
   int type_angle_a = 1;     //lipidのangleの種類（現状1種）
   double temp_angle_xy;     // (= angle_to_place_inner_lipid)
@@ -201,7 +204,8 @@ int main()
       temp_angle_xz += angle_to_place_inner_lipid;
 
 //      current_rand = get_rand_uni_real(engine);
-      current_rand = 0.8;//ベシクルに穴をあけるため
+//      current_rand = 0.8;//ベシクルに穴をあけるため
+      current_rand = 0.95;//ベシクルに穴をあけるため
 
       //std::cout<<(1/2)*(1-std::cos(temp_angle_xz))<<std::endl;
       //std::cout<<(1.0/2.0)*(1-std::cos(temp_angle_xz))<<std::endl;// 1.0が必要だった．そうでなければ，整数型にキャストされてゼロになってしまう．
@@ -438,6 +442,7 @@ int main()
 
   int temp_num_inner_water = 0;
   int temp_num_outer_water = 0;
+  int temp_num_water = 0;
   double random_x;
   double random_y;
   double random_z;
@@ -447,6 +452,36 @@ int main()
   // [0.0, 1.0) の一様分布実数生成器
   //  std::uniform_real_distribution<double> get_rand_uni_real(0.0, 1.0);
 
+
+
+#ifdef SET_WATER_MIDIUM
+std::cout<<"this is water_midium"<<std::endl;
+while (temp_num_water < num_water)
+  {
+
+    random_x = (get_rand_uni_real(engine) - 0.50) * box_size_x; //本来は (get_rand_uni_real(engine) - 0.50) * 2 * box_size_x / 2
+    random_y = (get_rand_uni_real(engine) - 0.50) * box_size_y;
+    random_z = (get_rand_uni_real(engine) - 0.50) * box_size_z; //ボックスの中心が原点(0,0)であることに注意．負の座標が許されないなら座標をbox_size/2ずらす必要がある．
+
+    //ベシクルの内側に存在する水粒子
+    if ((powf(random_x - vesicle_core_pos_x, 2.0) + powf(random_y - vesicle_core_pos_y, 2.0) + powf(random_z - vesicle_core_pos_z, 2.0) < vesicle_inner_radius2 && temp_num_water < num_water) || (powf(random_x - vesicle_core_pos_x, 2.0) + powf(random_y - vesicle_core_pos_y, 2.0) + powf(random_z - vesicle_core_pos_z, 2.0) > vesicle_outer_radius2 && temp_num_water < num_water))
+    {
+      //write_pos
+      fprintf(fpo0, "%d %d   %lf   %lf   %lf \n", particle_id, type_water,
+              random_x,
+              random_y,
+              random_z);
+
+      //write_vel
+      fprintf(fpo1, "%d   %lf   %lf   %lf \n", particle_id, 0.0, 0.0, 0.0);
+
+      particle_id += 1;
+      temp_num_water++;
+    }
+  }
+
+
+#else
   while (temp_num_inner_water < num_inner_water)
   {
 
@@ -495,6 +530,13 @@ int main()
 
     //    std::cout<<"temp_num_inner_water"<<temp_num_inner_water<<"temp_num_outer_water"<<temp_num_outer_water<<std::endl;
   }
+#endif
+
+
+
+
+
+
 
 #ifdef UNI_SET
   double unit_size = cell_size / (double)nunit;
