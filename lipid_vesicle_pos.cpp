@@ -21,13 +21,14 @@ int main()
   //1100 11000 110000 1200000
   const int num_outer_water = 25000000; //脂質の外側に存在する水粒子の数
   //24000 240000 2400000 25000000
-  const int num_inner_lipid_part = 200; //ベシクルの内側を構成する脂質の2次元半円に含まれる数 約　*0.32　で下の1/10のサイズ
+  const int num_inner_lipid_part = 190; //ベシクルの内側を構成する脂質の2次元半円に含まれる数 約　*0.32　で下の1/10のサイズ
   //15 45 140 440
-  const int num_outer_lipid_part = 220; //ベシクルの外側を構成する脂質の2次元半円に含まれる数
+  const int num_outer_lipid_part = 210; //ベシクルの外側を構成する脂質の2次元半円に含まれる数
   //17 55 170 530
   const double bond_length = 0.5;             //脂質分子間の長さ
   const double lipid_to_lipid_length = 0.5;   //内脂質分子と外脂質分子の距離
-  const double vesicle_radius = 13.0 * 2.154 * 2.154; // /2.154 ; // * 2.154 * 2.154 ;//ベシクルの半径(inner_lipidとouter_lipidの中間と原点を測る) 2.154 ~= powf(10,1/3) 粒子数10倍にしたければ10倍の(^1/3)をかけたもの．
+//  const double vesicle_radius = 13.0 * 2.154 * 2.154; // /2.154 ; // * 2.154 * 2.154 ;//ベシクルの半径(inner_lipidとouter_lipidの中間と原点を測る) 2.154 ~= powf(10,1/3) 粒子数10倍にしたければ10倍の(^1/3)をかけたもの．
+  const double vesicle_radius = 13.0 * 2.154 * 2.154 * 1.01; // 経を少し大きくして，網目状からの球体になるのを待つ
   const double vesicle_core_pos_x = 0;        //ベシクル中心x座標
   const double vesicle_core_pos_y = 0;        //ベシクル中心y座標
   const double vesicle_core_pos_z = 0;        //ベシクル中心z座標
@@ -205,7 +206,7 @@ int main()
 
 //      current_rand = get_rand_uni_real(engine);
 //      current_rand = 0.8;//ベシクルに穴をあけるため
-      current_rand = 0.95;//ベシクルに穴をあけるため
+      current_rand = 0.65;//ベシクルに穴をあけるため
 
       //std::cout<<(1/2)*(1-std::cos(temp_angle_xz))<<std::endl;
       //std::cout<<(1.0/2.0)*(1-std::cos(temp_angle_xz))<<std::endl;// 1.0が必要だった．そうでなければ，整数型にキャストされてゼロになってしまう．
@@ -329,7 +330,7 @@ int main()
     {
       temp_angle_xz += angle_to_place_outer_lipid;
 //      current_rand = get_rand_uni_real(engine);
-      current_rand = 0.8;//ベシクルに穴をあけるため
+      current_rand = 0.65;//ベシクルに穴をあけるため
 
       //      if(temp_angle_xz *lipid_delete_rate*get_rand_uni_real(engine) > 2 * M_PI) {//密度の高い部分を改善するため
       //      if(temp_angle_xz <=  angle_to_place_outer_lipid*10) {//密度の高い部分を改善するため
